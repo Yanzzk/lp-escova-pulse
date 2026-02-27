@@ -14,8 +14,8 @@
     const ctx = canvas.getContext('2d', { alpha: false });
 
     const TOTAL = 140;
-    const FPS = 18;          // slow-motion feel
-    const BLUR = 0.18;        // ghost alpha for motion blur (0 = off)
+    const FPS = 10;          // very slow-motion, fluid feel
+    const BLUR = 0.25;        // stronger ghost alpha for motion blur (0 = off)
     const PATH = (i) => `Gif-Images/Gif_${String(i).padStart(3, '0')}.jpg`;
 
     const images = new Array(TOTAL);

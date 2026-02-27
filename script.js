@@ -22,7 +22,6 @@
     const images = new Array(TOTAL);
     let loaded = 0;
     let current = 0;          // Agora é um float (ex: 12.4)
-    let direction = 1;        // 1 = forward, -1 = backward
     let running = false;
     let lastTime = 0;
     const interval = 1000 / FPS;
@@ -39,9 +38,8 @@
     // ── Ultra-smooth Frame Blending Draw ──
     function draw(exactFrame) {
         const i1 = Math.floor(exactFrame);
-        let i2 = i1 + direction;
-        if (i2 < 0) i2 = 0;
-        if (i2 > TOTAL - 1) i2 = TOTAL - 1;
+        // Loop perfeito: quando chega no último, o blend acontece com o frame 0 (primeiro)
+        const i2 = (i1 + 1) % TOTAL;
 
         const img1 = images[i1];
         const img2 = images[i2];
@@ -64,8 +62,8 @@
         ctx.drawImage(img1, dx, dy, dw, dh);
 
         // Blenda com o próximo frame baseada na fração (interpolação perfeita)
-        if (img2?.complete && i1 !== i2) {
-            const fraction = Math.abs(exactFrame - i1);
+        if (img2?.complete) {
+            const fraction = exactFrame - i1;
             if (fraction > 0.02) {
                 ctx.globalAlpha = fraction;
                 ctx.drawImage(img2, dx, dy, dw, dh);
@@ -80,9 +78,11 @@
         if (ts - lastTime >= interval) {
             lastTime = ts;
             draw(current);
-            current += direction * SPEED;
-            if (current >= TOTAL - 1) { current = TOTAL - 1; direction = -1; }
-            else if (current <= 0) { current = 0; direction = 1; }
+            // Avança continuamente pra frente e vira o loop na emenda
+            current += SPEED;
+            if (current >= TOTAL) {
+                current -= TOTAL;
+            }
         }
         requestAnimationFrame(animate);
     }

@@ -266,6 +266,7 @@ em {
     min-height: 620px;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     overflow: hidden;
     padding-top: 36px;
 }
@@ -704,6 +705,74 @@ em {
 .compare-winner {
     color: var(--gold-lt);
     font-weight: 600;
+}
+
+/* ══════════════════════
+   TECH WRAPPER
+══════════════════════ */
+.tech-wrapper {
+    display: flex;
+    gap: 40px;
+    margin: 72px 0;
+    align-items: center;
+    background: rgba(201, 169, 110, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 40px;
+    border-radius: var(--r-xl);
+}
+
+.tech-images {
+    flex: 1;
+    min-width: 280px;
+    position: relative;
+}
+
+.tech-img-1 {
+    border-radius: var(--r-md);
+    max-width: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.tech-img-2 {
+    border-radius: var(--r-md);
+    max-width: 80%;
+    transform: translate(15%, -30%);
+    position: relative;
+    z-index: 3;
+    box-shadow: var(--shadow-card);
+}
+
+.tech-text {
+    flex: 1;
+    min-width: 280px;
+}
+
+.tech-text h3 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 16px;
+    line-height: 1.2;
+}
+
+.tech-text p {
+    font-size: 0.95rem;
+    color: var(--muted-2);
+    margin-bottom: 24px;
+    line-height: 1.7;
+}
+
+.tech-text ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tech-text li {
+    margin-bottom: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--gold-lt);
 }
 
 /* ══════════════════════
@@ -1368,8 +1437,18 @@ em {
 
     .pain-grid,
     .features-3col,
-    .bonus-grid {
+    .bonus-grid,
+    .tech-wrapper {
         grid-template-columns: 1fr;
+    }
+
+    .tech-wrapper {
+        flex-direction: column;
+        padding: 24px;
+    }
+
+    .tech-img-2 {
+        transform: translate(10%, -20%);
     }
 
     .anchor-grid {
@@ -1392,7 +1471,7 @@ em {
 
     .hero__overlay {
         background:
-            linear-gradient(180deg, rgba(8, 8, 8, 0.7) 0%, rgba(8, 8, 8, 0.3) 30%, rgba(8, 8, 8, 0.25) 60%, rgba(8, 8, 8, 0.9) 100%);
+            linear-gradient(180deg, transparent 0%, rgba(8, 8, 8, 0.2) 35%, rgba(8, 8, 8, 0.75) 65%, rgba(8, 8, 8, 0.98) 100%);
     }
 
     .sticky-cta {
@@ -1415,6 +1494,8 @@ em {
 @media (max-width: 600px) {
     .hero {
         min-height: 100dvh;
+        align-items: flex-end;
+        padding-bottom: 90px;
     }
 
     .hero__content {

@@ -165,8 +165,10 @@ em {
 }
 
 .btn--ghost {
-    background: transparent;
-    border: 1.5px solid rgba(248, 245, 240, 0.2);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(248, 245, 240, 0.15);
     color: var(--white);
     padding: 15px 28px;
     font-size: 0.84rem;
@@ -236,6 +238,8 @@ em {
     align-items: center;
     gap: 4px;
     background: rgba(201, 169, 110, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(201, 169, 110, 0.2);
     color: var(--gold-lt);
     padding: 5px 12px;
@@ -297,15 +301,17 @@ em {
 
 .hero__eyebrow {
     display: inline-block;
-    background: rgba(201, 169, 110, 0.1);
+    background: rgba(201, 169, 110, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(201, 169, 110, 0.25);
     color: var(--gold);
-    padding: 5px 14px;
+    padding: 6px 16px;
     border-radius: 100px;
     font-size: 0.74rem;
     font-weight: 700;
     letter-spacing: 0.06em;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .hero__h1 {
@@ -459,7 +465,7 @@ em {
    SECTIONS
 ══════════════════════ */
 .section {
-    padding: 88px 0;
+    padding: 112px 0;
 }
 
 .s-dark {
@@ -527,8 +533,8 @@ em {
 .pain-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-    margin: 44px 0 32px;
+    gap: 24px;
+    margin: 56px 0 40px;
 }
 
 .pain-card {
@@ -1146,7 +1152,7 @@ em {
     margin: 40px auto;
 }
 
-.faq-col {}
+
 
 .faq-item {
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -1439,7 +1445,7 @@ em {
     }
 
     .section {
-        padding: 64px 0;
+        padding: 88px 0;
     }
 
     .s-title {

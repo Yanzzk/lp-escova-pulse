@@ -258,7 +258,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     `;
         notification.innerHTML = `
       <span style="font-size:1.3rem">🛒</span>
-      <div><strong style="color:#F8F5F0">${name} de ${city}</strong><br/>acabou de pedir a Escova Pulse!</div>
+      <div><strong style="color:#F8F5F0">${name} de ${city}</strong><br/>acabou de pedir a Escova Alisadora 3 em 1!</div>
     `;
         requestAnimationFrame(() => {
             notification.style.transform = 'translateX(0)';

@@ -1,106 +1,98 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   <title>Escova Pulse — Seca, Alisa e Modela em 1 Único Movimento</title>
-  <meta name="description" content="A escova 3 em 1 que seca, alisa e modela em minutos. Sem salão. Sem fila. Pagamento apenas na entrega. Risco zero pra você." />
+  <meta name="description"
+    content="A escova 3 em 1 que seca, alisa e modela em minutos. Sem salão. Sem fila. Pagamento apenas na entrega. Risco zero pra você." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
-  <!-- ✅ BARRA FIXA DE CONFIANÇA (SEMPRE VISÍVEL) -->
-  <div class="trust-bar">
-    <span class="trust-bar__icon">🔒</span>
-    <span>Risco Zero: Pague <strong>apenas quando o produto chegar nas suas mãos</strong></span>
+  <!-- ═══ TRUST BAR — STICKY TOP ═══ -->
+  <div class="trust-bar" id="trustBar">
+    <span>🔒 Risco Zero: Pague <strong>apenas quando o produto chegar nas suas mãos</strong></span>
   </div>
 
   <!-- ═══════════════════════════════════════════════ -->
-  <!-- DOBRA 1 — HERO: A PROMESSA INEGÁVEL            -->
+  <!-- DOBRA 1 — HERO DINÂMICO COM CANVAS             -->
   <!-- ═══════════════════════════════════════════════ -->
   <section class="hero" id="hero">
-    <div class="container hero__inner">
+    <canvas class="hero__canvas" id="heroCanvas"></canvas>
+    <div class="hero__overlay"></div>
 
-      <div class="hero__text">
-        <div class="hero__badge">✨ A virada de jogo para o seu cabelo</div>
+    <div class="hero__content">
+      <div class="hero__badge anim-el">✨ Resultado de salão em casa</div>
 
-        <h1 class="hero__headline">
-          Cabelo <span class="highlight">perfeito em 10 minutos</span>.<br/>
-          Sem salão. Sem sofrimento.<br/>
-          Sem abrir mão da sua manhã.
-        </h1>
+      <h1 class="hero__headline anim-el">
+        Cabelo de salão.<br />
+        <span class="gold">Em 10 minutos.</span><br />
+        Sem sair de casa.
+      </h1>
 
-        <p class="hero__subheadline">
-          A <strong>Escova Pulse 3 em 1</strong> seca, alisa e modela em um único movimento — enquanto você toma o seu café. E o melhor: você não paga <strong>nada agora</strong>. O pagamento é feito diretamente nas mãos do entregador.
-        </p>
+      <p class="hero__sub anim-el">
+        Seca. Alisa. Modela. <strong>Tudo em um único movimento.</strong><br />
+        Pague somente quando chegar na sua porta.
+      </p>
 
-        <div class="hero__trust">
-          <span class="trust-pill">🔒 Pague só na entrega</span>
-          <span class="trust-pill">🚚 Frete Grátis</span>
-          <span class="trust-pill">⭐ +4.800 alunas satisfeitas</span>
-        </div>
-
-        <a href="#oferta" class="btn btn--primary btn--lg">
-          QUERO RECEBER EM CASA E PAGAR NA ENTREGA
-          <span class="btn__arrow">→</span>
-        </a>
-
-        <p class="hero__cta-sub">
-          🔒 Sem cartão. Sem cadastro. Pague somente quando chegar.
-        </p>
-
-        <!-- 🔥 ESCASSEZ NO TOPO -->
-        <div class="urgency-bar">
-          <span class="urgency-bar__dot"></span>
-          Restam <strong id="stock-count">7 unidades</strong> com entrega garantida para a sua região
-        </div>
+      <div class="hero__ctas anim-el">
+        <a href="#oferta" class="btn btn--gold">QUERO A MINHA</a>
+        <a href="#solucao" class="btn btn--ghost">VER BENEFÍCIOS</a>
       </div>
 
-      <div class="hero__image-wrap">
-        <!-- [IMAGEM: Foto premium do produto em fundo escuro] -->
-        <img src="hero.png" alt="Escova Pulse 3 em 1" class="hero__product-img" />
-        <div class="hero__glow"></div>
-        <div class="hero__float-badge">
-          <strong>3 em 1</strong>
-          <span>Seca · Alisa · Modela</span>
-        </div>
+      <div class="hero__pills anim-el">
+        <span class="pill">🔒 Pague na entrega</span>
+        <span class="pill">🚚 Frete Grátis</span>
+        <span class="pill">⭐ +4.800 clientes</span>
       </div>
+    </div>
 
+    <div class="hero__scroll-hint">
+      <span></span>
+      <small>Role para baixo</small>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════ -->
   <!-- DOBRA 2 — A FACA NA DOR (PAS)                  -->
   <!-- ═══════════════════════════════════════════════ -->
-  <section class="pain" id="dor">
+  <section class="section section--dark" id="dor">
     <div class="container">
 
-      <div class="pain__eyebrow">Você se reconhece nisso?</div>
-      <h2 class="pain__headline">
-        A gaveta cheia de aparelhos que nunca<br/>
-        resolveram <em>de verdade</em>.
+      <p class="eyebrow anim-el">Você se reconhece?</p>
+      <h2 class="section__title anim-el">
+        A gaveta cheia de aparelhos<br />
+        que nunca resolveram <em>de verdade</em>.
       </h2>
 
-      <div class="pain__cards">
-        <div class="pain__card">
-          <div class="pain__card-icon">😤</div>
-          <p>Você acorda cedo, vai para o banheiro e <strong>30 minutos depois ainda está lutando</strong> com o secador numa mão e a chapinha na outra. No final, o cabelo racha, resseca e parece palha.</p>
+      <div class="pain-grid">
+        <div class="pain-card anim-el">
+          <div class="pain-card__icon">😤</div>
+          <p>Você acorda cedo, vai para o banheiro e <strong>30 minutos depois ainda está lutando</strong> com o secador
+            numa mão e a chapinha na outra. O cabelo racha, resseca e parece palha.</p>
         </div>
-        <div class="pain__card">
-          <div class="pain__card-icon">💸</div>
-          <p>Você já gastou fortuna em <strong>aparelhos que prometiam milagres</strong> e hoje vivem jogados na gaveta. Cada um deles custou caro. Nenhum resolveu tudo.</p>
+        <div class="pain-card anim-el">
+          <div class="pain-card__icon">💸</div>
+          <p>Já gastou fortuna em <strong>aparelhos que prometiam milagres</strong> e hoje vivem jogados na gaveta. Cada
+            um custou caro. Nenhum resolveu tudo.</p>
         </div>
-        <div class="pain__card">
-          <div class="pain__card-icon">😞</div>
-          <p>E quando finalmente chega no trabalho, aquela <strong>sensação de que poderia ter ficado melhor</strong>. Que com um pouco mais de tempo... Mas o tempo nunca tem.</p>
+        <div class="pain-card anim-el">
+          <div class="pain-card__icon">😞</div>
+          <p>Quando finalmente chega no trabalho, aquela <strong>sensação de que poderia estar melhor</strong>. Um pouco
+            mais de tempo... mas o tempo nunca tem.</p>
         </div>
       </div>
 
-      <div class="pain__bridge">
-        <p>A culpa <strong>não é sua.</strong> As ferramentas erradas nunca vão te dar o resultado certo. O que você precisa não é de mais um aparelho — é do aparelho <em>certo.</em></p>
+      <div class="bridge anim-el">
+        <p>A culpa <strong>não é sua.</strong> As ferramentas erradas nunca dão o resultado certo.<br />
+          O que você precisa não é de mais um aparelho — é do aparelho <em class="gold">certo.</em></p>
       </div>
 
     </div>
@@ -109,50 +101,46 @@
   <!-- ═══════════════════════════════════════════════ -->
   <!-- DOBRA 3 — O MECANISMO 3 EM 1                   -->
   <!-- ═══════════════════════════════════════════════ -->
-  <section class="mechanism" id="solucao">
+  <section class="section section--alt" id="solucao">
     <div class="container">
 
-      <div class="mechanism__eyebrow">A Solução</div>
-      <h2 class="mechanism__headline">
-        Um único movimento.<br/>
-        <span class="highlight">Três resultados. Dez minutos.</span>
+      <p class="eyebrow anim-el">A Solução</p>
+      <h2 class="section__title anim-el">
+        Um único movimento.<br />
+        <span class="gold">Três resultados. Dez minutos.</span>
       </h2>
-      <p class="mechanism__subheadline">A Escova Pulse foi projetada para mulheres reais, com rotinas reais. Sem complicação.</p>
+      <p class="section__sub anim-el">Projetada para mulheres reais, com rotinas reais.</p>
 
-      <div class="mechanism__features">
-
-        <div class="feature-card">
-          <div class="feature-card__number">01</div>
-          <div class="feature-card__icon">💨</div>
-          <h3 class="feature-card__title">SECA</h3>
-          <p class="feature-card__desc">O fluxo de ar aquecido elimina a umidade enquanto você penteia. <strong>Adeus secador separado.</strong> Ganhe de volta 15 minutos toda manhã.</p>
-          <p class="feature-card__benefit">✨ Benefício: Mais tempo para tomar um café em paz antes de sair.</p>
+      <div class="features-grid">
+        <div class="feature anim-el">
+          <span class="feature__num">01</span>
+          <div class="feature__icon">💨</div>
+          <h3>SECA</h3>
+          <p>O fluxo de ar aquecido elimina a umidade enquanto você penteia. <strong>Adeus secador separado.</strong>
+          </p>
+          <div class="feature__tag">✨ Mais tempo pro café da manhã</div>
         </div>
-
-        <div class="feature-card feature-card--highlight">
-          <div class="feature-card__number">02</div>
-          <div class="feature-card__icon">✨</div>
-          <h3 class="feature-card__title">ALISA</h3>
-          <p class="feature-card__desc">As cerdas de íon negativo alinham os fios na raiz com <strong>calor controlado e seguro</strong>, sem fritar. Resultado de chapinha. Risco de chapinha zero.</p>
-          <p class="feature-card__benefit">✨ Benefício: Cabelo liso, brilhante e sem aquela sensação de queimado.</p>
+        <div class="feature feature--highlight anim-el">
+          <span class="feature__num">02</span>
+          <div class="feature__icon">✨</div>
+          <h3>ALISA</h3>
+          <p>Cerdas de íon negativo alinham os fios com <strong>calor controlado e seguro</strong>. Resultado de
+            chapinha. Risco zero.</p>
+          <div class="feature__tag">✨ Brilho e maciez sem fritar</div>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-card__number">03</div>
-          <div class="feature-card__icon">🌀</div>
-          <h3 class="feature-card__title">MODELA</h3>
-          <p class="feature-card__desc">O design da escova permite curvar as pontas ou levantar a raiz com volume. <strong>Do liso ao natural volumoso</strong> — você escolhe como sair de casa.</p>
-          <p class="feature-card__benefit">✨ Benefício: Chegue ao trabalho impecável e receba aquele elogio do dia.</p>
+        <div class="feature anim-el">
+          <span class="feature__num">03</span>
+          <div class="feature__icon">🌀</div>
+          <h3>MODELA</h3>
+          <p>Curva as pontas ou levanta a raiz com volume. <strong>Do liso ao natural volumoso</strong> — você escolhe.
+          </p>
+          <div class="feature__tag">✨ Impecável no trabalho</div>
         </div>
-
       </div>
 
-      <div class="mechanism__cta-wrap">
-        <a href="#oferta" class="btn btn--primary">
-          QUERO RECEBER EM CASA E PAGAR NA ENTREGA
-          <span class="btn__arrow">→</span>
-        </a>
-        <p class="btn__sub">🔒 Risco Zero: Pague apenas quando o produto chegar nas suas mãos</p>
+      <div class="cta-block anim-el">
+        <a href="#oferta" class="btn btn--gold btn--wide">QUERO RECEBER EM CASA E PAGAR NA ENTREGA →</a>
+        <p class="cta-sub">🔒 Sem cartão. Sem cadastro. Pague somente quando chegar.</p>
       </div>
 
     </div>
@@ -161,68 +149,53 @@
   <!-- ═══════════════════════════════════════════════ -->
   <!-- DOBRA 4 — PROVA SOCIAL                         -->
   <!-- ═══════════════════════════════════════════════ -->
-  <section class="proof" id="resultados">
+  <section class="section section--dark" id="resultados">
     <div class="container">
 
-      <div class="proof__eyebrow">Resultados Reais</div>
-      <h2 class="proof__headline">Elas duvidaram. Usaram.<br/><span class="highlight">Não pararam mais.</span></h2>
+      <p class="eyebrow anim-el">Resultados Reais</p>
+      <h2 class="section__title anim-el">Elas duvidaram. Usaram.<br /><span class="gold">Não pararam mais.</span></h2>
 
-      <!-- [IMAGEM: Coloque aqui a foto "Antes e Depois" real do produto] -->
-      <div class="proof__before-after">
-        <img src="antes-depois.png" alt="Resultado Antes e Depois da Escova Pulse" class="proof__ba-img" />
-        <div class="proof__ba-labels">
+      <div class="ba-wrap anim-el">
+        <img src="antes-depois.png" alt="Resultado Antes e Depois da Escova Pulse" class="ba-img" />
+        <div class="ba-labels">
           <span class="ba-label ba-label--before">ANTES</span>
           <span class="ba-label ba-label--after">DEPOIS ✨</span>
         </div>
       </div>
-      <!-- [FIM DA ÁREA DE IMAGEM] -->
 
-      <div class="testimonials">
-
-        <div class="testimonial-card">
-          <div class="testimonial-card__stars">⭐⭐⭐⭐⭐</div>
-          <p class="testimonial-card__text">"Eu estava com medo de pagar e chegar um produto lixo. Quando vi que podia pagar só pro entregador, pedi na hora. Chegou em 3 dias. Minha filha não me deixava ir trabalhar sem usar. <strong>Nunca mais piso no salão para fazer escova.</strong>"</p>
-          <div class="testimonial-card__author">
-            <div class="testimonial-card__avatar">JM</div>
-            <div>
-              <strong>Juliana M.</strong>
-              <span>Mãe de 2, Adminstradora — SP</span>
-            </div>
+      <div class="testimonials-grid">
+        <div class="testimonial anim-el">
+          <div class="testimonial__stars">★★★★★</div>
+          <p>"Quando vi que podia pagar só pro entregador, pedi na hora. Chegou em 3 dias. <strong>Nunca mais piso no
+              salão.</strong>"</p>
+          <div class="testimonial__author">
+            <div class="testimonial__avatar">JM</div>
+            <div><strong>Juliana M.</strong><br /><small>Mãe de 2 — SP</small></div>
           </div>
         </div>
-
-        <div class="testimonial-card testimonial-card--featured">
-          <div class="testimonial-card__stars">⭐⭐⭐⭐⭐</div>
-          <p class="testimonial-card__text">"30 anos sofrendo todo dia com cabelo crespo e ondulado. Hoje passo a escova em 12 minutos e chego na escola onde trabalho ouvindo elogio. <strong>Parece que fiz escova no salão.</strong> E o melhor: paguei só na mão do motoboy."</p>
-          <div class="testimonial-card__author">
-            <div class="testimonial-card__avatar">CA</div>
-            <div>
-              <strong>Carla A.</strong>
-              <span>Professora — MG</span>
-            </div>
+        <div class="testimonial testimonial--accent anim-el">
+          <div class="testimonial__stars">★★★★★</div>
+          <p>"30 anos sofrendo com cabelo crespo. Hoje passo a escova em 12 minutos. <strong>Parece que fiz escova no
+              salão.</strong>"</p>
+          <div class="testimonial__author">
+            <div class="testimonial__avatar">CA</div>
+            <div><strong>Carla A.</strong><br /><small>Professora — MG</small></div>
           </div>
         </div>
-
-        <div class="testimonial-card">
-          <div class="testimonial-card__stars">⭐⭐⭐⭐⭐</div>
-          <p class="testimonial-card__text">"Tinha chapinha, secador, difusor... tudo jogado na gaveta. Comprei a Pulse porque a amiga me indicou. Em duas semanas, doei tudo. <strong>Nunca precisei de tão pouco para um resultado tão alto.</strong>"</p>
-          <div class="testimonial-card__author">
-            <div class="testimonial-card__avatar">RF</div>
-            <div>
-              <strong>Rafaela F.</strong>
-              <span>Empreendedora — RJ</span>
-            </div>
+        <div class="testimonial anim-el">
+          <div class="testimonial__stars">★★★★★</div>
+          <p>"Tinha chapinha, secador, difusor — tudo na gaveta. Comprei a Pulse. <strong>Em duas semanas, doei
+              tudo.</strong>"</p>
+          <div class="testimonial__author">
+            <div class="testimonial__avatar">RF</div>
+            <div><strong>Rafaela F.</strong><br /><small>Empreendedora — RJ</small></div>
           </div>
         </div>
-
       </div>
 
-      <div class="proof__cta-wrap">
-        <a href="#oferta" class="btn btn--primary">
-          QUERO RECEBER EM CASA E PAGAR NA ENTREGA
-          <span class="btn__arrow">→</span>
-        </a>
-        <p class="btn__sub">🔒 Risco Zero: Pague apenas quando o produto chegar nas suas mãos</p>
+      <div class="cta-block anim-el">
+        <a href="#oferta" class="btn btn--gold btn--wide">QUERO RECEBER EM CASA E PAGAR NA ENTREGA →</a>
+        <p class="cta-sub">🔒 Risco Zero: Pague apenas quando o produto chegar nas suas mãos</p>
       </div>
 
     </div>
@@ -231,66 +204,63 @@
   <!-- ═══════════════════════════════════════════════ -->
   <!-- DOBRA 5 — A OFERTA IRRESISTÍVEL                -->
   <!-- ═══════════════════════════════════════════════ -->
-  <section class="offer" id="oferta">
+  <section class="section section--offer" id="oferta">
     <div class="container">
 
-      <div class="offer__eyebrow">Oferta Especial · Tempo Limitado</div>
-      <h2 class="offer__headline">Não pague pelo problema.<br/><span class="highlight">Pague pela solução.</span></h2>
+      <p class="eyebrow anim-el">Oferta Especial · Tempo Limitado</p>
+      <h2 class="section__title anim-el">Não pague pelo problema.<br /><span class="gold">Pague pela solução.</span>
+      </h2>
 
-      <!-- ANCORAGEM DE PREÇO -->
       <div class="anchor-grid">
-        <div class="anchor-card anchor-card--crossed">
+        <div class="anchor anchor--crossed anim-el">
           <h3>Salão toda semana</h3>
-          <p class="anchor-card__price"><s>R$ 720/mês</s></p>
-          <p>+ tempo de espera<br/>+ cabelo danificado<br/>+ dinheiro indo embora</p>
+          <p class="anchor__price"><s>R$ 720/mês</s></p>
+          <p>+ tempo de espera<br />+ cabelo danificado</p>
         </div>
-        <div class="anchor-card anchor-card--crossed">
+        <div class="anchor anchor--crossed anim-el">
           <h3>3 aparelhos separados</h3>
-          <p class="anchor-card__price"><s>R$ 900+</s></p>
-          <p>Secador + Chapinha + Modelador<br/>+ gaveta lotada<br/>+ 1h no banheiro</p>
+          <p class="anchor__price"><s>R$ 900+</s></p>
+          <p>Secador + Chapinha + Modelador<br />+ 1h no banheiro</p>
         </div>
-        <div class="anchor-card anchor-card--winner">
-          <div class="anchor-card__best">MELHOR ESCOLHA ✨</div>
+        <div class="anchor anchor--winner anim-el">
+          <div class="anchor__badge">MELHOR ESCOLHA ✨</div>
           <h3>Escova Pulse 3 em 1</h3>
-          <p class="anchor-card__price-old"><s>De R$ 297,00</s></p>
-          <p class="anchor-card__price-new">R$ 197<span>,00</span></p>
-          <p class="anchor-card__installment">ou 10x de R$ 19,70 no cartão</p>
-          <p class="anchor-card__features">✅ Frete Grátis<br/>✅ Resultado desde o 1º uso<br/>✅ Pague só na entrega</p>
+          <p class="anchor__old"><s>De R$ 297,00</s></p>
+          <p class="anchor__new">R$ 197<span>,00</span></p>
+          <p class="anchor__installment">ou 10x de R$ 19,70</p>
+          <p class="anchor__features">✅ Frete Grátis<br />✅ Resultado no 1º uso<br />✅ Pague só na entrega</p>
         </div>
       </div>
 
       <!-- COUNTDOWN -->
-      <div class="countdown-wrap">
+      <div class="countdown-wrap anim-el">
         <p class="countdown__label">⚡ Frete grátis + pagamento na entrega expira em:</p>
         <div class="countdown" id="countdown">
-          <div class="countdown__block"><span id="c-hours">02</span><small>horas</small></div>
-          <div class="countdown__sep">:</div>
-          <div class="countdown__block"><span id="c-minutes">59</span><small>min</small></div>
-          <div class="countdown__sep">:</div>
-          <div class="countdown__block"><span id="c-seconds">00</span><small>seg</small></div>
+          <div class="cd-block"><span id="c-hours">02</span><small>horas</small></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-block"><span id="c-minutes">59</span><small>min</small></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-block"><span id="c-seconds">00</span><small>seg</small></div>
         </div>
       </div>
 
-      <!-- CTA PRINCIPAL -->
-      <div class="offer__cta-wrap">
-        <a href="#" class="btn btn--primary btn--xl btn--pulse" id="btn-comprar">
-          🔒 QUERO RECEBER EM CASA E PAGAR NA ENTREGA
-          <span class="btn__arrow">→</span>
+      <div class="cta-block anim-el">
+        <a href="#" class="btn btn--gold btn--wide btn--pulse" id="btn-comprar">
+          🔒 QUERO RECEBER EM CASA E PAGAR NA ENTREGA →
         </a>
-        <p class="btn__sub">🔒 Risco Zero: Pague apenas quando o produto chegar nas suas mãos</p>
-
-        <div class="offer__badges">
-          <div class="badge">🚚 Frete Grátis</div>
-          <div class="badge">✅ Pagamento na entrega</div>
-          <div class="badge">🛡️ Garantia 30 dias</div>
-          <div class="badge">⭐ +4.800 clientes</div>
+        <p class="cta-sub">🔒 Risco Zero: Pague apenas quando o produto chegar nas suas mãos</p>
+        <div class="badges">
+          <span class="mini-badge">🚚 Frete Grátis</span>
+          <span class="mini-badge">✅ Pague na entrega</span>
+          <span class="mini-badge">🛡️ Garantia 30 dias</span>
+          <span class="mini-badge">⭐ +4.800 clientes</span>
         </div>
       </div>
 
-      <!-- ESCASSEZ -->
-      <div class="scarcity-box">
-        <span class="scarcity-box__dot"></span>
-        <p>⚠️ <strong>Atenção:</strong> Restam apenas <strong id="stock-count-2">7 unidades</strong> com entrega garantida para a sua região. Com a alta demanda, não garantimos reposição em curto prazo.</p>
+      <div class="scarcity anim-el">
+        <span class="scarcity__dot"></span>
+        <p>⚠️ <strong>Atenção:</strong> Restam apenas <strong id="stock-count">7 unidades</strong> com entrega garantida
+          para a sua região.</p>
       </div>
 
     </div>
@@ -299,58 +269,54 @@
   <!-- ═══════════════════════════════════════════════ -->
   <!-- DOBRA 6 — GARANTIA & FAQ                       -->
   <!-- ═══════════════════════════════════════════════ -->
-  <section class="guarantee" id="garantia">
+  <section class="section section--dark" id="garantia">
     <div class="container">
 
-      <div class="guarantee__box">
-        <div class="guarantee__shield">🛡️</div>
-        <h2 class="guarantee__headline">Garantia Blindada de 30 Dias</h2>
-        <p class="guarantee__text">Se por qualquer motivo você não ficar 100% satisfeita com o resultado, basta entrar em contato dentro de 30 dias após o recebimento e devolveremos o seu dinheiro <strong>integralmente, sem perguntas, sem burocracia.</strong> Sem riscos. Nenhum. Zero.</p>
+      <div class="guarantee anim-el">
+        <div class="guarantee__icon">🛡️</div>
+        <h2>Garantia Blindada de 30 Dias</h2>
+        <p>Se por qualquer motivo você não ficar 100% satisfeita, basta entrar em contato dentro de 30 dias e
+          devolveremos o seu dinheiro <strong>integralmente, sem perguntas, sem burocracia.</strong></p>
       </div>
 
     </div>
   </section>
 
-  <section class="faq" id="faq">
+  <section class="section section--alt" id="faq">
     <div class="container">
 
-      <h2 class="faq__headline">Suas dúvidas. Respondidas.</h2>
+      <h2 class="section__title anim-el">Perguntas Frequentes</h2>
 
-      <div class="faq__list">
-
-        <details class="faq__item">
+      <div class="faq-list">
+        <details class="faq-item anim-el">
           <summary>Como funciona o pagamento na entrega?</summary>
-          <p>É simples: você faz o pedido aqui no site, sem colocar nenhum dado de cartão ou pagar antecipadamente. Quando a transportadora chegar na sua porta, você paga em dinheiro diretamente para o entregador. Sem riscos, sem medo.</p>
+          <p>Você faz o pedido sem colocar nenhum dado de cartão. Quando a transportadora chegar, você paga em dinheiro
+            ao entregador. Sem riscos, sem medo.</p>
         </details>
-
-        <details class="faq__item">
+        <details class="faq-item anim-el">
           <summary>Quanto tempo demora para chegar?</summary>
-          <p>O prazo de entrega é de <strong>3 a 7 dias úteis</strong> após a confirmação do pedido, dependendo da sua região. Você receberá o código de rastreio por e-mail/SMS assim que o produto for despachado.</p>
+          <p>O prazo é de <strong>3 a 7 dias úteis</strong>. Você recebe o código de rastreio por e-mail/SMS assim que o
+            produto for despachado.</p>
         </details>
-
-        <details class="faq__item">
+        <details class="faq-item anim-el">
           <summary>Funciona em cabelo crespo, ondulado ou liso?</summary>
-          <p>Sim! A Escova Pulse foi desenvolvida para funcionar em <strong>todos os tipos de fio</strong> — liso, ondulado, cacheado e crespo. O nível de temperatura ajustável permite adaptar o resultado ao seu tipo de cabelo.</p>
+          <p>Sim! A Escova Pulse funciona em <strong>todos os tipos de fio</strong>. A temperatura ajustável permite
+            adaptar o resultado ao seu cabelo.</p>
         </details>
-
-        <details class="faq__item">
+        <details class="faq-item anim-el">
           <summary>Ela danifica o cabelo?</summary>
-          <p>Não. Ao contrário das chapinhas tradicionais, a Escova Pulse usa <strong>íons negativos e temperatura de cerâmica</strong> controlada que sela a cutícula do fio em vez de queimá-la. O resultado é brilhoso e saudável desde o primeiro uso.</p>
+          <p>Não. Usa <strong>íons negativos e cerâmica</strong> com calor controlado que sela a cutícula sem queimar.
+            Resultado brilhoso e saudável.</p>
         </details>
-
-        <details class="faq__item">
+        <details class="faq-item anim-el">
           <summary>E se eu não gostar?</summary>
-          <p>Você está protegida pela nossa Garantia Blindada de 30 dias. Entre em contato, devolvemos 100% do valor pago. Sem burocracia.</p>
+          <p>Garantia Blindada de 30 dias. Devolvemos 100% do valor pago. Sem burocracia.</p>
         </details>
-
       </div>
 
-      <div class="faq__cta-wrap">
-        <a href="#oferta" class="btn btn--primary btn--lg">
-          QUERO RECEBER EM CASA E PAGAR NA ENTREGA
-          <span class="btn__arrow">→</span>
-        </a>
-        <p class="btn__sub">🔒 Risco Zero: Pague apenas quando o produto chegar nas suas mãos</p>
+      <div class="cta-block anim-el">
+        <a href="#oferta" class="btn btn--gold btn--wide">QUERO RECEBER EM CASA E PAGAR NA ENTREGA →</a>
+        <p class="cta-sub">🔒 Risco Zero: Pague apenas quando o produto chegar nas suas mãos</p>
       </div>
 
     </div>
@@ -359,26 +325,24 @@
   <!-- FOOTER -->
   <footer class="footer">
     <div class="container footer__inner">
-      <div class="footer__brand">
-        <span class="footer__logo">✨ ESCOVA PULSE</span>
-        <p class="footer__tagline">A escova que devolve o seu tempo. E o seu brilho.</p>
+      <span class="footer__logo">✨ ESCOVA PULSE</span>
+      <p class="footer__tagline">A escova que devolve o seu tempo. E o seu brilho.</p>
+      <div class="footer__pills">
+        <span class="pill pill--dim">🔒 Pague só na entrega</span>
+        <span class="pill pill--dim">🛡️ Garantia 30 dias</span>
+        <span class="pill pill--dim">🚚 Frete Grátis</span>
       </div>
-      <div class="footer__trust">
-        <span class="trust-pill trust-pill--dark">🔒 Pague só na entrega</span>
-        <span class="trust-pill trust-pill--dark">🛡️ Garantia 30 dias</span>
-        <span class="trust-pill trust-pill--dark">🚚 Frete Grátis</span>
-      </div>
-      <p class="footer__legal">© 2025 Escova Pulse · Todos os direitos reservados · Este site não é afiliado ao Facebook, Instagram ou Google.</p>
+      <p class="footer__legal">© 2025 Escova Pulse · Todos os direitos reservados · Este site não é afiliado ao
+        Facebook, Instagram ou Google.</p>
     </div>
   </footer>
 
-  <!-- CTA STICKY MOBILE -->
-  <div class="sticky-cta" id="sticky-cta">
-    <a href="#oferta" class="btn btn--primary btn--sticky">
-      🔒 PAGAR SÓ NA ENTREGA → QUERO!
-    </a>
+  <!-- STICKY MOBILE CTA -->
+  <div class="sticky-cta" id="stickyCta">
+    <a href="#oferta" class="btn btn--gold btn--sticky">🔒 PAGAR SÓ NA ENTREGA → QUERO!</a>
   </div>
 
   <script src="script.js"></script>
 </body>
+
 </html>

@@ -294,7 +294,7 @@ em {
 
 .hero__content {
     position: relative;
-    z-index: 3;
+    z-index: 10;
     max-width: 540px;
     padding: 0 24px 0 40px;
 }
@@ -814,8 +814,7 @@ em {
     width: 100%;
     aspect-ratio: 9/16;
     object-fit: cover;
-    max-height: 340px;
-    object-position: top;
+    object-position: center;
 }
 
 .proof-card__body {
@@ -1442,6 +1441,7 @@ em {
 
     .proof-grid {
         grid-template-columns: 1fr;
+        gap: 32px;
     }
 
     .section {

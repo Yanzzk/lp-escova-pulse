@@ -1,235 +1,254 @@
 /* ═══════════════════════════════════════════════
-   ESCOVA PULSE — script.js
-   Canvas image sequence + countdown + scroll FX
+   ESCOVA PULSE v3 — script.js
+   Hormozi-optimised · Canvas + Full Conversion FX
 ═══════════════════════════════════════════════ */
 
-// ──────────────────────────────
-// 1. CANVAS IMAGE SEQUENCE (Slow-motion hero)
-// ──────────────────────────────
+// ──────────────────────────────────────────────
+// 1. HERO CANVAS — 140 frame slow-motion sequence
+// Optimised: progressive batch loading, RAF loop,
+// ping-pong direction, cover fit, motion blur.
+// ──────────────────────────────────────────────
 (function () {
     const canvas = document.getElementById('heroCanvas');
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
 
-    const TOTAL_FRAMES = 140;
-    const FPS = 18; // slow motion feel
-    const framePath = (i) => `Gif-Images/Gif_${String(i).padStart(3, '0')}.jpg`;
+    const TOTAL = 140;
+    const FPS = 18;          // slow-motion feel
+    const BLUR = 0.18;        // ghost alpha for motion blur (0 = off)
+    const PATH = (i) => `Gif-Images/Gif_${String(i).padStart(3, '0')}.jpg`;
 
-    let images = [];
+    const images = new Array(TOTAL);
     let loaded = 0;
-    let currentFrame = 0;
-    let direction = 1; // 1 = forward, -1 = backward (ping-pong loop)
-    let animating = false;
+    let current = 0;
+    let direction = 1;        // 1 = forward, -1 = backward
+    let running = false;
     let lastTime = 0;
     const interval = 1000 / FPS;
 
-    // Resize canvas to match viewport
+    // ── Canvas resize ──
     function resize() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        if (images[currentFrame] && images[currentFrame].complete) {
-            drawFrame(currentFrame);
-        }
+        if (images[current]?.complete) draw(current);
     }
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', resize, { passive: true });
     resize();
 
-    // Draw a single frame with cover behavior + slight motion blur
-    function drawFrame(index) {
-        const img = images[index];
-        if (!img || !img.complete || !img.naturalWidth) return;
-
-        const cw = canvas.width;
-        const ch = canvas.height;
-        const iw = img.naturalWidth;
-        const ih = img.naturalHeight;
-
-        // object-fit: cover math
+    // ── Cover-fit draw ──
+    function draw(i) {
+        const img = images[i];
+        if (!img?.complete || !img.naturalWidth) return;
+        const cw = canvas.width, ch = canvas.height;
+        const iw = img.naturalWidth, ih = img.naturalHeight;
         const scale = Math.max(cw / iw, ch / ih);
-        const dw = iw * scale;
-        const dh = ih * scale;
-        const dx = (cw - dw) / 2;
-        const dy = (ch - dh) / 2;
-
-        // Motion blur: draw previous frame with low opacity
-        ctx.globalAlpha = 0.15;
-        ctx.fillStyle = '#0a0a0a';
+        const dw = iw * scale, dh = ih * scale;
+        const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
+        // Motion-blur ghost
+        ctx.globalAlpha = BLUR;
+        ctx.fillStyle = '#080808';
         ctx.fillRect(0, 0, cw, ch);
-
         ctx.globalAlpha = 1;
         ctx.drawImage(img, dx, dy, dw, dh);
     }
 
-    // Animation loop
-    function animate(timestamp) {
-        if (!animating) return;
-        const delta = timestamp - lastTime;
-        if (delta >= interval) {
-            lastTime = timestamp - (delta % interval);
-
-            drawFrame(currentFrame);
-            currentFrame += direction;
-
-            // Ping-pong at boundaries
-            if (currentFrame >= TOTAL_FRAMES - 1) {
-                currentFrame = TOTAL_FRAMES - 1;
-                direction = -1;
-            } else if (currentFrame <= 0) {
-                currentFrame = 0;
-                direction = 1;
-            }
+    // ── RAF animation loop ──
+    function animate(ts) {
+        if (!running) return;
+        if (ts - lastTime >= interval) {
+            lastTime = ts;
+            draw(current);
+            current += direction;
+            if (current >= TOTAL - 1) { current = TOTAL - 1; direction = -1; }
+            else if (current <= 0) { current = 0; direction = 1; }
         }
         requestAnimationFrame(animate);
     }
-
-    function startAnimation() {
-        if (animating) return;
-        animating = true;
+    function startLoop() {
+        if (running) return;
+        running = true;
         lastTime = performance.now();
         requestAnimationFrame(animate);
     }
 
-    // Preload images in batches for performance
-    function preloadBatch(start, end) {
-        for (let i = start; i < end && i < TOTAL_FRAMES; i++) {
+    // ── Progressive batch loading ──
+    function loadBatch(start, end, cb) {
+        let done = 0;
+        const count = Math.min(end, TOTAL) - start;
+        for (let i = start; i < Math.min(end, TOTAL); i++) {
             const img = new Image();
-            img.src = framePath(i);
+            img.decoding = 'async';
             img.onload = () => {
                 loaded++;
-                // Draw first frame immediately
-                if (i === 0) {
-                    drawFrame(0);
-                }
-                // Start animation when first 30 frames are ready
-                if (loaded >= 30) {
-                    startAnimation();
-                }
+                done++;
+                if (i === 0) draw(0);
+                if (loaded === 30) startLoop(); // start after first batch
+                if (done === count && cb) cb();
             };
+            img.onerror = () => done++;
+            img.src = PATH(i);
             images[i] = img;
         }
     }
 
-    // Load in progressive batches: first 30, then rest
-    preloadBatch(0, 30);
-    setTimeout(() => preloadBatch(30, 80), 800);
-    setTimeout(() => preloadBatch(80, TOTAL_FRAMES), 1600);
+    loadBatch(0, 30, () => setTimeout(() => loadBatch(30, 80, () => setTimeout(() => loadBatch(80, TOTAL), 200)), 200));
 })();
 
 
-// ──────────────────────────────
-// 2. COUNTDOWN TIMER (Session-persistent)
-// ──────────────────────────────
+// ──────────────────────────────────────────────
+// 2. COUNTDOWN — Persistent per session
+// ──────────────────────────────────────────────
 (function () {
-    const key = 'pulse_deadline';
-    let deadline = sessionStorage.getItem(key);
-    if (!deadline) {
-        deadline = Date.now() + (2 * 60 + 30) * 60 * 1000; // 2h30m
-        sessionStorage.setItem(key, deadline);
+    const KEY = 'pulse_deadline_v3';
+    let deadline = +sessionStorage.getItem(KEY) || 0;
+    if (!deadline || deadline < Date.now()) {
+        deadline = Date.now() + (2 * 3600 + 47 * 60) * 1000; // 2h 47m
+        sessionStorage.setItem(KEY, deadline);
     }
 
-    const h = document.getElementById('c-hours');
-    const m = document.getElementById('c-minutes');
-    const s = document.getElementById('c-seconds');
-    if (!h) return;
+    const elH = document.getElementById('c-hours');
+    const elM = document.getElementById('c-minutes');
+    const elS = document.getElementById('c-seconds');
+    if (!elH) return;
 
-    const pad = (n) => String(n).padStart(2, '0');
-
+    const pad = (n) => String(Math.max(0, n)).padStart(2, '0');
     function tick() {
         const diff = Math.max(0, deadline - Date.now());
-        const totalSec = Math.floor(diff / 1000);
-        h.textContent = pad(Math.floor(totalSec / 3600));
-        m.textContent = pad(Math.floor((totalSec % 3600) / 60));
-        s.textContent = pad(totalSec % 60);
-        if (diff > 0) requestAnimationFrame(tick);
+        const s = Math.floor(diff / 1000);
+        elH.textContent = pad(Math.floor(s / 3600));
+        elM.textContent = pad(Math.floor((s % 3600) / 60));
+        elS.textContent = pad(s % 60);
+        if (diff > 0) setTimeout(tick, 1000);
     }
     tick();
 })();
 
 
-// ──────────────────────────────
-// 3. SCARCITY COUNTER
-// ──────────────────────────────
+// ──────────────────────────────────────────────
+// 3. SCARCITY — Credible numbers (Hormozi)
+// ──────────────────────────────────────────────
 (function () {
-    const count = Math.floor(Math.random() * 5) + 5;
-    document.querySelectorAll('#stock-count, #stock-count-2').forEach(el => {
-        if (el) el.textContent = count + ' unidades';
+    // Stock: 11–17 (believable range, not "7")
+    const stock = Math.floor(Math.random() * 7) + 11;
+    document.querySelectorAll('#stock-count').forEach(el => {
+        el.textContent = stock;
+    });
+    // Buyers today: 19–29
+    const buyers = Math.floor(Math.random() * 11) + 19;
+    document.querySelectorAll('#today-buyers').forEach(el => {
+        el.textContent = buyers + ' pessoas';
     });
 })();
 
 
-// ──────────────────────────────
-// 4. SCROLL ANIMATIONS (Intersection Observer)
-// ──────────────────────────────
+// ──────────────────────────────────────────────
+// 4. SCROLL ANIMATIONS — IntersectionObserver
+// ──────────────────────────────────────────────
 (function () {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                io.unobserve(e.target);
             }
         });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.07, rootMargin: '0px 0px -32px 0px' });
 
-    document.querySelectorAll('.anim-el').forEach(el => observer.observe(el));
+    document.querySelectorAll('.anim-el').forEach(el => io.observe(el));
 })();
 
 
-// ──────────────────────────────
-// 5. TRUST BAR — Hide on scroll down, show on scroll up
-// ──────────────────────────────
+// ──────────────────────────────────────────────
+// 5. HERO ELEMENTS — Trigger on load
+// ──────────────────────────────────────────────
+window.addEventListener('load', () => {
+    document.querySelectorAll('.hero .anim-el').forEach(el => el.classList.add('visible'));
+}, { once: true });
+
+
+// ──────────────────────────────────────────────
+// 6. TRUST BAR — Hide on scroll-down, show on up
+// ──────────────────────────────────────────────
 (function () {
     const bar = document.getElementById('trustBar');
     if (!bar) return;
     let lastY = 0;
-
     window.addEventListener('scroll', () => {
         const y = window.scrollY;
-        if (y > 300 && y > lastY) {
-            bar.classList.add('hidden');
-        } else {
-            bar.classList.remove('hidden');
-        }
+        bar.classList.toggle('hidden', y > 200 && y > lastY);
         lastY = y;
     }, { passive: true });
 })();
 
 
-// ──────────────────────────────
-// 6. STICKY CTA — Show after scrolling past hero
-// ──────────────────────────────
+// ──────────────────────────────────────────────
+// 7. STICKY CTA — Appear past hero
+// ──────────────────────────────────────────────
 (function () {
-    const sticky = document.getElementById('stickyCta');
-    if (!sticky) return;
-
+    const cta = document.getElementById('stickyCta');
+    if (!cta) return;
     window.addEventListener('scroll', () => {
-        if (window.scrollY > window.innerHeight * 0.8) {
-            sticky.classList.add('show');
-        } else {
-            sticky.classList.remove('show');
-        }
+        cta.classList.toggle('show', window.scrollY > window.innerHeight * 0.75);
     }, { passive: true });
 })();
 
 
-// ──────────────────────────────
-// 7. SMOOTH SCROLL for all hash links
-// ──────────────────────────────
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener('click', function (e) {
+// ──────────────────────────────────────────────
+// 8. SMOOTH SCROLL — All hash anchors
+// ──────────────────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (!target) return;
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        const offset = 44; // trust bar height
+        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
     });
 });
 
 
-// ──────────────────────────────
-// 8. HERO ELEMENTS — trigger visible on load
-// ──────────────────────────────
-window.addEventListener('load', () => {
-    document.querySelectorAll('.hero .anim-el').forEach(el => {
-        el.classList.add('visible');
-    });
-});
+// ──────────────────────────────────────────────
+// 9. LIVE BUYERS TICKER (Social Proof)
+// Simulates realtime purchases for FOMO
+// ──────────────────────────────────────────────
+(function () {
+    const names = ['Ana', 'Carla', 'Juliana', 'Fernanda', 'Thaís', 'Raquel', 'Beatriz', 'Larissa', 'Mariana', 'Camila', 'Renata', 'Patrícia'];
+    const cities = ['SP', 'RJ', 'BH', 'Salvador', 'Curitiba', 'Fortaleza', 'Manaus', 'Brasília', 'Porto Alegre', 'Recife'];
+    const notification = document.createElement('div');
+    notification.className = 'buyer-toast';
+    document.body.appendChild(notification);
+
+    function randomEl(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+    function showToast() {
+        const name = randomEl(names);
+        const city = randomEl(cities);
+        notification.style.cssText = `
+      position:fixed;bottom:80px;left:16px;z-index:998;
+      background:#161616;border:1px solid rgba(201,169,110,0.25);
+      border-radius:12px;padding:12px 16px;
+      display:flex;align-items:center;gap:10px;
+      font-family:'Outfit',sans-serif;font-size:0.77rem;
+      color:#C8BEB2;box-shadow:0 8px 32px rgba(0,0,0,0.6);
+      transform:translateX(-110%);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
+      max-width:260px;
+    `;
+        notification.innerHTML = `
+      <span style="font-size:1.3rem">🛒</span>
+      <div><strong style="color:#F8F5F0">${name} de ${city}</strong><br/>acabou de pedir a Escova Pulse!</div>
+    `;
+        requestAnimationFrame(() => {
+            notification.style.transform = 'translateX(0)';
+            setTimeout(() => {
+                notification.style.transform = 'translateX(-110%)';
+            }, 3800);
+        });
+    }
+
+    // Show first after 8s, then every 25–45s
+    setTimeout(() => {
+        showToast();
+        setInterval(showToast, 25000 + Math.random() * 20000);
+    }, 8000);
+})();

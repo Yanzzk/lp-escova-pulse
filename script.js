@@ -14,13 +14,14 @@
     const ctx = canvas.getContext('2d', { alpha: false });
 
     const TOTAL = 140;
-    const FPS = 10;          // very slow-motion, fluid feel
-    const BLUR = 0.25;        // stronger ghost alpha for motion blur (0 = off)
+    const FPS = 60;           // Ultra-smooth 60fps refresh rate
+    const SPEED = 0.25;       // Avanço de frame por tick (0.25 * 60 = 15 frames reais/seg = lento)
+    const BLUR = 0.15;        // Ghost alpha para motion blur
     const PATH = (i) => `Gif-Images/Gif_${String(i).padStart(3, '0')}.jpg`;
 
     const images = new Array(TOTAL);
     let loaded = 0;
-    let current = 0;
+    let current = 0;          // Agora é um float (ex: 12.4)
     let direction = 1;        // 1 = forward, -1 = backward
     let running = false;
     let lastTime = 0;
@@ -30,26 +31,47 @@
     function resize() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        if (images[current]?.complete) draw(current);
+        if (images[Math.floor(current)]?.complete) draw(current);
     }
     window.addEventListener('resize', resize, { passive: true });
     resize();
 
-    // ── Cover-fit draw ──
-    function draw(i) {
-        const img = images[i];
-        if (!img?.complete || !img.naturalWidth) return;
+    // ── Ultra-smooth Frame Blending Draw ──
+    function draw(exactFrame) {
+        const i1 = Math.floor(exactFrame);
+        let i2 = i1 + direction;
+        if (i2 < 0) i2 = 0;
+        if (i2 > TOTAL - 1) i2 = TOTAL - 1;
+
+        const img1 = images[i1];
+        const img2 = images[i2];
+
+        if (!img1?.complete || !img1.naturalWidth) return;
+
         const cw = canvas.width, ch = canvas.height;
-        const iw = img.naturalWidth, ih = img.naturalHeight;
+        const iw = img1.naturalWidth, ih = img1.naturalHeight;
         const scale = Math.max(cw / iw, ch / ih);
         const dw = iw * scale, dh = ih * scale;
         const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
-        // Motion-blur ghost
+
+        // Fundo com leve motion blur trace
         ctx.globalAlpha = BLUR;
         ctx.fillStyle = '#080808';
         ctx.fillRect(0, 0, cw, ch);
+
+        // Desenha o frame base
         ctx.globalAlpha = 1;
-        ctx.drawImage(img, dx, dy, dw, dh);
+        ctx.drawImage(img1, dx, dy, dw, dh);
+
+        // Blenda com o próximo frame baseada na fração (interpolação perfeita)
+        if (img2?.complete && i1 !== i2) {
+            const fraction = Math.abs(exactFrame - i1);
+            if (fraction > 0.02) {
+                ctx.globalAlpha = fraction;
+                ctx.drawImage(img2, dx, dy, dw, dh);
+                ctx.globalAlpha = 1;
+            }
+        }
     }
 
     // ── RAF animation loop ──
@@ -58,7 +80,7 @@
         if (ts - lastTime >= interval) {
             lastTime = ts;
             draw(current);
-            current += direction;
+            current += direction * SPEED;
             if (current >= TOTAL - 1) { current = TOTAL - 1; direction = -1; }
             else if (current <= 0) { current = 0; direction = 1; }
         }

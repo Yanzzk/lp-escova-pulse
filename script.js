@@ -257,7 +257,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       max-width:260px;
     `;
         notification.innerHTML = `
-      <span style="font-size:1.3rem">🛒</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
       <div><strong style="color:#F8F5F0">${name} de ${city}</strong><br/>acabou de pedir a Escova Alisadora 3 em 1!</div>
     `;
         requestAnimationFrame(() => {
@@ -273,4 +273,21 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
         showToast();
         setInterval(showToast, 25000 + Math.random() * 20000);
     }, 8000);
+})();
+
+// ──────────────────────────────────────────────
+// 10. IMAGE PROTECTION (Anti-Spy/Anti-Download)
+// ──────────────────────────────────────────────
+(function () {
+    document.addEventListener('contextmenu', function (e) {
+        if (e.target.tagName === 'IMG') {
+            e.preventDefault();
+        }
+    }, false);
+
+    document.addEventListener('dragstart', function (e) {
+        if (e.target.tagName === 'IMG') {
+            e.preventDefault();
+        }
+    }, false);
 })();

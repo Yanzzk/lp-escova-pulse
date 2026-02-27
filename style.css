@@ -59,8 +59,23 @@ body {
 
 img {
     max-width: 100%;
-    display: block;
     height: auto;
+    display: block;
+    /* Image Protection */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
+    /* Helps prevent long press and drag on some devices but must ensure they aren't meant to be clicked */
+}
+
+/* Allow clicking on links inside interactive areas, but keep images protected */
+a img,
+button img {
+    pointer-events: auto;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 a {
@@ -1397,7 +1412,7 @@ em {
 .anim-el {
     opacity: 0;
     transform: translateY(28px);
-    transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
 }
 
 .anim-el.visible {
@@ -1411,23 +1426,23 @@ em {
 }
 
 .hero .anim-el:nth-child(1) {
-    transition-delay: 0.25s;
+    transition-delay: 0.1s;
 }
 
 .hero .anim-el:nth-child(2) {
-    transition-delay: 0.45s;
+    transition-delay: 0.2s;
 }
 
 .hero .anim-el:nth-child(3) {
-    transition-delay: 0.65s;
+    transition-delay: 0.3s;
 }
 
 .hero .anim-el:nth-child(4) {
-    transition-delay: 0.85s;
+    transition-delay: 0.4s;
 }
 
 .hero .anim-el:nth-child(5) {
-    transition-delay: 1.05s;
+    transition-delay: 0.5s;
 }
 
 /* ══════════════════════

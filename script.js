@@ -28,8 +28,11 @@
 
     // ── Canvas resize ──
     function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        const container = canvas.parentElement;
+        if (!container) return;
+        const rect = container.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
         if (images[Math.floor(current)]?.complete) draw(current);
     }
     window.addEventListener('resize', resize, { passive: true });

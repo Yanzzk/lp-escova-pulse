@@ -294,3 +294,29 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
         }
     }, false);
 })();
+
+// ──────────────────────────────────────────────
+// 11. SECURITY & PERFORMANCE (CTA Debounce)
+// ──────────────────────────────────────────────
+(function () {
+    const ctas = document.querySelectorAll('a.btn, button.btn');
+    let isProcessing = false;
+
+    ctas.forEach(cta => {
+        cta.addEventListener('click', function (e) {
+            if (isProcessing) {
+                e.preventDefault();
+                return false;
+            }
+            isProcessing = true;
+            setTimeout(() => { isProcessing = false; }, 2000); // 2s debounce
+        });
+    });
+
+    // Global Sanitization Helper
+    window.sanitizeHTML = function (str) {
+        const temp = document.createElement('div');
+        temp.textContent = str;
+        return temp.innerHTML;
+    };
+})();

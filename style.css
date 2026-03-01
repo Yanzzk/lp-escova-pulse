@@ -284,6 +284,28 @@ em {
     padding-bottom: 64px;
 }
 
+.hero__center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+
+.hero__content--centered {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero__content--centered .hero__ctas {
+    justify-content: center;
+    width: 100%;
+}
+
 .hero__grid {
     display: flex;
     align-items: center;

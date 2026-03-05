@@ -43,8 +43,9 @@ html {
 
 body {
     font-family: var(--ff);
-    background: var(--black);
-    color: var(--muted-2);
+    background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+    background-attachment: fixed;
+    color: #a1a1a1;
     line-height: 1.65;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
@@ -110,11 +111,9 @@ em {
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(8, 8, 8, 0.88);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border-bottom: 1px solid rgba(201, 169, 110, 0.18);
-    padding: 9px 16px;
+    background: #000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 10px 16px;
     text-align: center;
     transition: transform 0.35s var(--ease);
 }
@@ -123,12 +122,11 @@ em {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--gold-lt);
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .trust-dot {
@@ -1682,71 +1680,87 @@ em {
     }
 }
 
+/* ══════════════════════
+   PREMIUM MOBILE-FIRST OVERRIDES
+══════════════════════ */
 @media (max-width: 768px) {
     .hero__grid {
         display: flex;
         flex-direction: column;
-    }
-
-    .hero__text-content {
         text-align: center;
+        gap: 24px;
     }
 
     .hero__image-wrap {
         order: -1;
+        width: 100%;
     }
 
     .hero__main-img {
-        max-height: 300px !important;
-        width: auto !important;
+        height: 50vh !important;
+        max-height: none !important;
+        width: 100% !important;
+        object-fit: cover !important;
+        border-radius: 0 0 20px 20px;
         margin: 0 auto !important;
         display: block;
     }
 
+    .hero__text-content {
+        text-align: center;
+        padding: 0 16px;
+    }
+
+    .hero__ctas {
+        flex-direction: column;
+        align-items: center;
+    }
+
     .hero__ctas .btn {
-        width: 90% !important;
-        margin: 0 auto;
-        justify-content: center;
+        display: none;
     }
 }
 
-#heroCanvas {
-    width: 100% !important;
-    height: auto !important;
-    aspect-ratio: 440 / 540 !important;
-    max-width: 440px !important;
-    margin: 0 auto !important;
-    display: block !important;
+/* ── FIXED CTA MOBILE (Gold Glow) ── */
+.sticky-cta-mobile {
+    display: none;
 }
 
 @media (max-width: 768px) {
-    .hero__grid {
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .hero__image-wrap {
-        order: -1;
-    }
-
-    .hero__main-img {
-        max-height: 300px;
-        width: auto;
-        margin: 0 auto;
-    }
-
-    .hero__ctas .btn {
+    .sticky-cta-mobile {
+        display: block;
+        position: fixed;
+        bottom: 20px;
+        left: 5%;
         width: 90%;
-        margin: 0 auto;
+        z-index: 900;
+        text-align: center;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .sticky-cta-mobile .btn {
+        width: 100%;
+        padding: 16px 24px;
+        font-size: 0.85rem;
+        border-radius: 14px;
+        box-shadow: 0 0 25px rgba(212, 175, 55, 0.4), 0 0 60px rgba(212, 175, 55, 0.15);
+    }
+
+    .sticky-cta-mobile.is-hidden {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(20px);
     }
 }
 
+/* ── CANVAS LUXURY CARD ── */
 #heroCanvas {
-    width: 100% !important;
+    width: 95vw !important;
+    max-width: 600px !important;
     height: auto !important;
-    aspect-ratio: 440 / 540;
-    max-width: 440px;
-    margin: 0 auto;
-    display: block;
+    aspect-ratio: 440 / 540 !important;
+    margin: 20px auto !important;
+    display: block !important;
+    border-radius: 20px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
 }

@@ -998,18 +998,38 @@
 
   <script src="script.js"></script>
 
-  <!-- Hide fixed CTA near footer/FAQ so it doesn't cover content -->
+  <!-- Sticky CTA mobile: aparece após scroll, some no topo e no final -->
   <script>
     (function () {
       var cta = document.getElementById('stickyCmobile');
       if (!cta) return;
-      var targets = document.querySelectorAll('#faq, footer, .guarantee-section, .seal-bar');
-      if (!targets.length) return;
-      var observer = new IntersectionObserver(function (entries) {
-        var anyVisible = entries.some(function (e) { return e.isIntersecting; });
-        cta.classList.toggle('is-hidden', anyVisible);
-      }, { threshold: 0.1 });
-      targets.forEach(function (el) { observer.observe(el); });
+
+      var SHOW_THRESHOLD = 500; // px de scroll para aparecer
+      var isHiddenBySection = false;
+
+      // Esconde perto do FAQ / footer (IntersectionObserver)
+      var bottomSections = document.querySelectorAll('#faq, footer, .guarantee-section, .seal-bar');
+      if (bottomSections.length) {
+        var sectionObs = new IntersectionObserver(function (entries) {
+          isHiddenBySection = entries.some(function (e) { return e.isIntersecting; });
+          updateVisibility();
+        }, { threshold: 0.05 });
+        bottomSections.forEach(function (el) { sectionObs.observe(el); });
+      }
+
+      function updateVisibility() {
+        var scrolled = window.scrollY > SHOW_THRESHOLD;
+        if (isHiddenBySection || !scrolled) {
+          cta.classList.remove('is-visible');
+          cta.classList.add('is-hidden');
+        } else {
+          cta.classList.remove('is-hidden');
+          cta.classList.add('is-visible');
+        }
+      }
+
+      window.addEventListener('scroll', updateVisibility, { passive: true });
+      updateVisibility(); // estado inicial
     })();
   </script>
 </body>

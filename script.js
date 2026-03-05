@@ -252,49 +252,68 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 
 
 // ──────────────────────────────────────────────
-// 9. LIVE BUYERS TICKER (Social Proof)
-// Simulates realtime purchases for FOMO
+// 9. LIVE BUYERS — Chip compacto (anti-interrupção)
+// Minimalista · 1 linha · canto superior direito
 // ──────────────────────────────────────────────
 (function () {
-    const names = ['Ana', 'Carla', 'Juliana', 'Fernanda', 'Thaís', 'Raquel', 'Beatriz', 'Larissa', 'Mariana', 'Camila', 'Renata', 'Patrícia'];
-    const cities = ['SP', 'RJ', 'BH', 'Salvador', 'Curitiba', 'Fortaleza', 'Manaus', 'Brasília', 'Porto Alegre', 'Recife'];
-    const notification = document.createElement('div');
-    notification.className = 'buyer-toast';
-    document.body.appendChild(notification);
+    const names  = ['Ana', 'Carla', 'Juliana', 'Fernanda', 'Thaís', 'Raquel', 'Beatriz', 'Larissa', 'Mariana', 'Camila'];
+    const cities = ['SP', 'RJ', 'BH', 'Curitiba', 'Fortaleza', 'Brasília', 'Recife', 'Campinas'];
+
+    const chip = document.createElement('div');
+    chip.className = 'buyer-toast';
+    chip.setAttribute('aria-live', 'polite');
+    chip.setAttribute('aria-atomic', 'true');
+    chip.style.cssText = `
+      position:fixed;top:48px;right:12px;z-index:997;
+      background:rgba(22,22,22,0.96);
+      border:1px solid rgba(201,169,110,0.22);
+      border-radius:100px;
+      padding:6px 12px 6px 8px;
+      display:inline-flex;align-items:center;gap:6px;
+      font-family:'Outfit',sans-serif;font-size:0.68rem;
+      color:#C8BEB2;letter-spacing:0.02em;
+      box-shadow:0 4px 16px rgba(0,0,0,0.5);
+      max-width:210px;white-space:nowrap;overflow:hidden;
+      transform:translateY(-72px);
+      transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),opacity 0.3s ease;
+      opacity:0;pointer-events:none;
+    `;
+    document.body.appendChild(chip);
 
     function randomEl(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
     function showToast() {
         const name = randomEl(names);
         const city = randomEl(cities);
-        notification.style.cssText = `
-      position:fixed;bottom:80px;left:16px;z-index:998;
-      background:#161616;border:1px solid rgba(201,169,110,0.25);
-      border-radius:12px;padding:12px 16px;
-      display:flex;align-items:center;gap:10px;
-      font-family:'Outfit',sans-serif;font-size:0.77rem;
-      color:#C8BEB2;box-shadow:0 8px 32px rgba(0,0,0,0.6);
-      transform:translateX(-110%);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
-      max-width:260px;
-    `;
-        notification.innerHTML = `
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-      <div><strong style="color:#F8F5F0">${name} de ${city}</strong><br/>acabou de pedir a Escova Alisadora 3 em 1!</div>
-    `;
+
+        chip.innerHTML = `
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+            <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span><strong style="color:#F8F5F0;font-weight:600;">${name} (${city})</strong> comprou agora</span>
+        `;
+
+        // Entrada
         requestAnimationFrame(() => {
-            notification.style.transform = 'translateX(0)';
+            chip.style.transform  = 'translateY(0)';
+            chip.style.opacity    = '1';
+
+            // Saída após 2.6 segundos
             setTimeout(() => {
-                notification.style.transform = 'translateX(-110%)';
-            }, 3800);
+                chip.style.transform = 'translateY(-72px)';
+                chip.style.opacity   = '0';
+            }, 2600);
         });
     }
 
-    // Show first after 8s, then every 25–45s
+    // Primeira aparição após 12s · depois a cada 40–70s aleatório
     setTimeout(() => {
         showToast();
-        setInterval(showToast, 25000 + Math.random() * 20000);
-    }, 8000);
+        setInterval(showToast, 40000 + Math.random() * 30000);
+    }, 12000);
 })();
+
 
 // ──────────────────────────────────────────────
 // 10. IMAGE PROTECTION (Anti-Spy/Anti-Download)

@@ -307,9 +307,9 @@ em {
 }
 
 .hero__grid {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
     align-items: center;
-    justify-content: space-between;
     gap: 40px;
     width: 100%;
 }
@@ -1679,4 +1679,36 @@ em {
         font-size: 0.82rem;
         padding: 18px 20px;
     }
+}
+
+@media (max-width: 768px) {
+    .hero__grid {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero__image-wrap {
+        order: -1;
+    }
+
+    .hero__main-img {
+        max-height: 300px;
+        width: auto;
+        margin: 0 auto;
+    }
+
+    .hero__ctas .btn {
+        width: 90%;
+        margin: 0 auto;
+    }
+}
+
+#heroCanvas {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 440 / 540;
+    max-width: 440px;
+    margin: 0 auto;
+    display: block;
 }

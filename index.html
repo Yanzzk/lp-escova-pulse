@@ -103,15 +103,40 @@
        TRUST BAR — Fixed + glassmorphism
   ══════════════════════════════════════ -->
   <div class="trust-bar" id="trustBar">
-    <span class="trust-bar__inner">
-      <span style="color: var(--gold);">✓</span> Pagamento na Entrega &nbsp;&nbsp; 
-      <span style="color: var(--gold);">✓</span> Frete Grátis &nbsp;&nbsp; 
-      <span style="color: var(--gold);">✓</span> Teste por 30 Dias
-    </span>
+    <div class="trust-bar__track" role="marquee" aria-label="Benefícios da Escova Pulse">
+      <!-- Conjunto 1 — original -->
+      <span class="trust-bar__item trust-bar__item--highlight">
+        <span class="trust-live-dot"></span>
+        Pague só na entrega
+      </span>
+      <span class="trust-bar__sep" aria-hidden="true"></span>
+      <span class="trust-bar__item">🚚 Frete Grátis para todo o Brasil</span>
+      <span class="trust-bar__sep" aria-hidden="true"></span>
+      <span class="trust-bar__item">⭐ 4.800 mulheres transformadas · 4.9/5</span>
+      <span class="trust-bar__sep" aria-hidden="true"></span>
+      <span class="trust-bar__item">🛡️ 30 dias para devolver sem perguntas</span>
+      <span class="trust-bar__sep" aria-hidden="true"></span>
+      <span class="trust-bar__item">⚡ Aquece em 30 segundos · 3 funções em 1</span>
+      <span class="trust-bar__sep" aria-hidden="true"></span>
+      <!-- Conjunto 2 — cópia para loop sem salto -->
+      <span class="trust-bar__item trust-bar__item--highlight" aria-hidden="true">
+        <span class="trust-live-dot"></span>
+        Pague só na entrega
+      </span>
+      <span class="trust-bar__sep" aria-hidden="true"></span>
+      <span class="trust-bar__item" aria-hidden="true">🚚 Frete Grátis para todo o Brasil</span>
+      <span class="trust-bar__sep" aria-hidden="true"></span>
+      <span class="trust-bar__item" aria-hidden="true">⭐ 4.800 mulheres transformadas · 4.9/5</span>
+      <span class="trust-bar__sep" aria-hidden="true"></span>
+      <span class="trust-bar__item" aria-hidden="true">🛡️ 30 dias para devolver sem perguntas</span>
+      <span class="trust-bar__sep" aria-hidden="true"></span>
+      <span class="trust-bar__item" aria-hidden="true">⚡ Aquece em 30 segundos · 3 funções em 1</span>
+      <span class="trust-bar__sep" aria-hidden="true"></span>
+    </div>
   </div>
 
   <!-- ══════════════════════════════════════
-       DOBRA 1 — HERO com Canvas (Slow-Motion)
+       DOBRA 1 — HERO
   ══════════════════════════════════════ -->
   <section class="hero" id="hero">
     <div class="container hero__grid">
@@ -150,10 +175,15 @@
   ══════════════════════════════════════ -->
   <section class="section s-dark" id="demonstracao" style="background: var(--dark-2); padding-top: 64px;">
     <div class="container">
+      <p class="eyebrow anim-el" style="text-align:center; margin-bottom: 12px;">Demonstração real · Sem edição</p>
       <h2 class="s-title anim-el"
-        style="text-align: center; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto;">
-        Resultado Profissional em <span class="text-gold">Cada Passada.</span>
+        style="text-align: center; margin-bottom: 8px; max-width: 700px; margin-left: auto; margin-right: auto;">
+        Olha o que uma passada faz.<br>
+        <span class="text-gold" style="font-size: 0.85em;">(Sem gastar R$120 no salão.)</span>
       </h2>
+      <p class="s-sub anim-el" style="text-align:center; margin-bottom: 40px; max-width: 560px; margin-left: auto; margin-right: auto; font-size: 0.9rem; color: var(--muted);">
+        Assista a tecnologia de íons trabalhando ao vivo.<br>É exatamente isso que você vai receber em casa.
+      </p>
 
       <div class="demo-layout">
         <div class="demo-canvas-wrap anim-el">
@@ -170,8 +200,8 @@
                   </polygon>
                 </svg></div>
               <div>
-                <strong>Brilho espelhado</strong><br>
-                <span>instantâneo sem esforço.</span>
+                <strong>O cabelo do salão — na sua casa</strong><br>
+                <span>Uma passada. Sem espelho gigante, sem profissional, sem hora marcada.</span>
               </div>
             </li>
             <li>
@@ -180,8 +210,8 @@
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                 </svg></div>
               <div>
-                <strong>Zero frizz</strong><br>
-                <span>com tecnologia de íons.</span>
+                <strong>Acabou o armário cheio de anti-frizz</strong><br>
+                <span>Os íons selam a cutícula sozinhos. Você descarta tudo que não funcionava.</span>
               </div>
             </li>
             <li>
@@ -192,8 +222,8 @@
                   <path d="M14.5 13H12"></path>
                 </svg></div>
               <div>
-                <strong>Proteção térmica</strong><br>
-                <span>total sem estragar os fios.</span>
+                <strong>Seca, alisa e modela sem "fritar" nada</strong><br>
+                <span>Calor controlado que trabalha <em>com</em> seu fio — não contra ele.</span>
               </div>
             </li>
           </ul>
@@ -201,6 +231,7 @@
       </div>
     </div>
   </section>
+
 
   <!-- ══════════════════════════════════════
        TRUST SEAL — após hero
@@ -958,16 +989,7 @@
     </div>
   </footer>
 
-  <!-- STICKY CTA MOBILE -->
-  <div class="sticky-cta" id="stickyCta">
-    <a href="https://app.coinzz.com.br/checkout/escova-alisadora-3-em-1---pague-na-entrega-0" target="_blank"
-      class="btn btn--gold btn--sticky"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        style="display:inline-block;vertical-align:middle;margin-right:4px">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-      </svg> PAGAR SÓ NA ENTREGA — QUERO A MINHA!</a>
-  </div>
+
   <!-- STICKY CTA MOBILE (PREMIUM GLOW) -->
   <div class="sticky-cta-mobile" id="stickyCmobile">
     <a href="https://app.coinzz.com.br/checkout/escova-alisadora-3-em-1---pague-na-entrega-0"

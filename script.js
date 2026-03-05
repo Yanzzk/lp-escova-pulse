@@ -1,12 +1,7 @@
-/* ═══════════════════════════════════════════════
-   ESCOVA PULSE v3 — script.js
-   Hormozi-optimised · Canvas + Full Conversion FX
-═══════════════════════════════════════════════ */
-
 // ──────────────────────────────────────────────
-// 1. HERO CANVAS — 140 frame slow-motion sequence
-// Optimised: progressive batch loading, RAF loop,
-// ping-pong direction, cover fit, motion blur.
+// 1. HERO CANVAS — 140 frames · 60fps · Fluido
+// Sem throttle de FPS · Pausa fora da tela
+// Cache de escala · Motion blur premium
 // ──────────────────────────────────────────────
 (function () {
     const canvas = document.getElementById('heroCanvas');
@@ -14,57 +9,65 @@
     const ctx = canvas.getContext('2d', { alpha: false });
 
     const TOTAL = 140;
-    const FPS = 60;           // Ultra-smooth 60fps refresh rate
-    const SPEED = 0.25;       // Avanço de frame por tick (0.25 * 60 = 15 frames reais/seg = lento)
-    const BLUR = 0.15;        // Ghost alpha para motion blur
-    const PATH = (i) => `Gif-Images/Gif_${String(i).padStart(3, '0')}.jpg`;
+    const SPEED = 0.12;    // Slow-motion: ~7fps de conteúdo = ~19s por direção
+    const BLUR  = 0.10;    // Motion blur leve para suavidade máxima
+    const PATH  = (i) => `Gif-Images/Gif_${String(i).padStart(3, '0')}.jpg`;
 
     const images = new Array(TOTAL);
-    let loaded = 0;
-    let current = 0;          // Agora é um float (ex: 12.4)
-    let running = false;
-    let lastTime = 0;
-    const interval = 1000 / FPS;
+    let loaded    = 0;
+    let current   = 0;
+    let direction = 1;     // 1 = avança · -1 = retrocede (ping-pong seamless)
+    let running   = false;
+    let visible   = false;
+    let tabActive = true;
 
-    // ── Canvas resize ──
+    // ── Cache de escala (recalcula só no resize) ──
+    let cachedScale = null;
+    function invalidateCache() { cachedScale = null; }
+
     function resize() {
         const container = canvas.parentElement;
         if (!container) return;
         const rect = container.getBoundingClientRect();
-        canvas.width = rect.width;
+        canvas.width  = rect.width;
         canvas.height = rect.height;
+        invalidateCache();
         if (images[Math.floor(current)]?.complete) draw(current);
     }
     window.addEventListener('resize', resize, { passive: true });
     resize();
 
-    // ── Ultra-smooth Frame Blending Draw ──
+    // ── Draw com motion blur + cache de escala ──
     function draw(exactFrame) {
-        const i1 = Math.floor(exactFrame);
-        // Loop perfeito: quando chega no último, o blend acontece com o frame 0 (primeiro)
-        const i2 = (i1 + 1) % TOTAL;
-
+        const i1  = Math.floor(exactFrame);
+        const i2  = (i1 + 1) % TOTAL;
         const img1 = images[i1];
         const img2 = images[i2];
-
         if (!img1?.complete || !img1.naturalWidth) return;
 
         const cw = canvas.width, ch = canvas.height;
-        const iw = img1.naturalWidth, ih = img1.naturalHeight;
-        const scale = Math.max(cw / iw, ch / ih);
-        const dw = iw * scale, dh = ih * scale;
-        const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
 
-        // Fundo com leve motion blur trace
+        if (!cachedScale || cachedScale.cw !== cw || cachedScale.ch !== ch || cachedScale.iw !== img1.naturalWidth) {
+            const iw = img1.naturalWidth, ih = img1.naturalHeight;
+            const scale = Math.max(cw / iw, ch / ih);
+            cachedScale = {
+                cw, ch, iw,
+                dw: iw * scale, dh: ih * scale,
+                dx: (cw - iw * scale) / 2, dy: (ch - ih * scale) / 2
+            };
+        }
+        const { dw, dh, dx, dy } = cachedScale;
+
+        // Motion blur trace
         ctx.globalAlpha = BLUR;
         ctx.fillStyle = '#080808';
         ctx.fillRect(0, 0, cw, ch);
 
-        // Desenha o frame base
+        // Frame principal
         ctx.globalAlpha = 1;
         ctx.drawImage(img1, dx, dy, dw, dh);
 
-        // Blenda com o próximo frame baseada na fração (interpolação perfeita)
+        // Blend suave com o próximo frame
         if (img2?.complete) {
             const fraction = exactFrame - i1;
             if (fraction > 0.02) {
@@ -75,28 +78,42 @@
         }
     }
 
-    // ── RAF animation loop ──
-    function animate(ts) {
+    // ── RAF loop — 60fps · ping-pong seamless ──
+    function animate() {
         if (!running) return;
-        if (ts - lastTime >= interval) {
-            lastTime = ts;
+        if (visible && tabActive) {
             draw(current);
-            // Avança continuamente pra frente e vira o loop na emenda
-            current += SPEED;
-            if (current >= TOTAL) {
-                current -= TOTAL;
+            current += SPEED * direction;
+            // Ping-pong: inverte no final → seamless sem salto
+            if (current >= TOTAL - 1) {
+                current   = TOTAL - 1;
+                direction = -1;
+            } else if (current <= 0) {
+                current   = 0;
+                direction = 1;
             }
         }
         requestAnimationFrame(animate);
     }
+
     function startLoop() {
         if (running) return;
         running = true;
-        lastTime = performance.now();
         requestAnimationFrame(animate);
     }
 
-    // ── Progressive batch loading ──
+    // ── Pausa quando canvas sai da viewport (economiza CPU) ──
+    const visiObs = new IntersectionObserver((entries) => {
+        visible = entries[0].isIntersecting;
+    }, { threshold: 0.05 });
+    visiObs.observe(canvas);
+
+    // ── Pausa quando aba perde foco (economiza bateria) ──
+    document.addEventListener('visibilitychange', () => {
+        tabActive = document.visibilityState === 'visible';
+    });
+
+    // ── Carregamento em lote progressivo ──
     function loadBatch(start, end, cb) {
         let done = 0;
         const count = Math.min(end, TOTAL) - start;
@@ -106,8 +123,8 @@
             img.onload = () => {
                 loaded++;
                 done++;
-                if (i === 0) draw(0);
-                if (loaded === 30) startLoop(); // start after first batch
+                if (i === 0) { draw(0); visible = true; }
+                if (loaded === 30) startLoop();
                 if (done === count && cb) cb();
             };
             img.onerror = () => done++;
@@ -118,6 +135,7 @@
 
     loadBatch(0, 30, () => setTimeout(() => loadBatch(30, 80, () => setTimeout(() => loadBatch(80, TOTAL), 200)), 200));
 })();
+
 
 
 // ──────────────────────────────────────────────

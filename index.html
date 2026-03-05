@@ -990,46 +990,72 @@
   </footer>
 
 
-  <!-- STICKY CTA MOBILE (PREMIUM GLOW) -->
+  <!-- STICKY CTA MOBILE (SUPER COMPACTO) -->
   <div class="sticky-cta-mobile" id="stickyCmobile">
     <a href="https://app.coinzz.com.br/checkout/escova-alisadora-3-em-1---pague-na-entrega-0"
-      class="btn btn--gold">QUERO MEU CABELO DE SALÃO</a>
+      class="btn btn--gold">🛒 QUERO A MINHA</a>
   </div>
 
   <script src="script.js"></script>
 
-  <!-- Sticky CTA mobile: aparece após scroll, some no topo e no final -->
+  <!-- Sticky CTA mobile: Inteligente (Aparece rolando pra cima) -->
   <script>
     (function () {
       var cta = document.getElementById('stickyCmobile');
       if (!cta) return;
 
-      var SHOW_THRESHOLD = 500; // px de scroll para aparecer
-      var isHiddenBySection = false;
+      var lastScrollY = window.scrollY;
+      var SHOW_THRESHOLD = 600; // px de scroll (abaixo do hero)
+      var activeSections = 0;
 
-      // Esconde perto do FAQ / footer (IntersectionObserver)
+      // Usando add/delete com Set para não errar a contagem de sobreposições
+      var visibleElements = new Set();
+
       var bottomSections = document.querySelectorAll('#faq, footer, .guarantee-section, .seal-bar');
       if (bottomSections.length) {
         var sectionObs = new IntersectionObserver(function (entries) {
-          isHiddenBySection = entries.some(function (e) { return e.isIntersecting; });
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              visibleElements.add(e.target);
+            } else {
+              visibleElements.delete(e.target);
+            }
+          });
           updateVisibility();
-        }, { threshold: 0.05 });
+        }, { threshold: 0.01 });
         bottomSections.forEach(function (el) { sectionObs.observe(el); });
       }
 
       function updateVisibility() {
-        var scrolled = window.scrollY > SHOW_THRESHOLD;
-        if (isHiddenBySection || !scrolled) {
+        var currentScrollY = window.scrollY;
+        var scrollingUp = currentScrollY < lastScrollY - 3;
+        var scrollingDown = currentScrollY > lastScrollY + 3;
+        var passedTop = currentScrollY > SHOW_THRESHOLD;
+        var isHiddenBySection = visibleElements.size > 0;
+
+        if (isHiddenBySection || !passedTop) {
+          // Esconde no topo ou perto do final
           cta.classList.remove('is-visible');
           cta.classList.add('is-hidden');
         } else {
-          cta.classList.remove('is-hidden');
-          cta.classList.add('is-visible');
+          // Se está no "miolo" do site e rolar pra cima, MOSTRA
+          if (scrollingUp) {
+            cta.classList.add('is-visible');
+            cta.classList.remove('is-hidden');
+          } 
+          // Se rolar pra baixo, ESCONDE pra não atrapalhar a leitura
+          else if (scrollingDown) {
+            cta.classList.remove('is-visible');
+            cta.classList.add('is-hidden');
+          }
         }
+
+        // Reseta variável
+        lastScrollY = currentScrollY;
       }
 
       window.addEventListener('scroll', updateVisibility, { passive: true });
-      updateVisibility(); // estado inicial
+      updateVisibility();
     })();
   </script>
 </body>
